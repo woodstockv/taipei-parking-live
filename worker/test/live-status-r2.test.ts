@@ -1,10 +1,11 @@
 import { execPath } from "node:process";
 import { spawnSync } from "node:child_process";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { authorizationHeader } from "../../tools/live-status/sigv4.ts";
 import { createR2Adapter, type R2Adapter } from "../../tools/live-status/r2-adapter.ts";
 import { runCycle } from "../../tools/live-status/cycle.ts";
-import { collectGarbage } from "../../tools/live-status/gc.ts";
+import { collectGarbage, retainedKey, retentionKey } from "../../tools/live-status/gc.ts";
+import { manifestKey } from "../../tools/live-status/publish.ts";
 import { runEntrypoint } from "../../tools/live-status/runner-entrypoint.ts";
 import { assembly, geometry, makeClock, pin, response, xml } from "./live-status-publish-fixtures.ts";
 
@@ -407,6 +408,46 @@ describe("LIVE-6a R2 client", () => {
     const failed = await failing.withExclusivePublisher(() => collectGarbage({ store: failing, geometrySha256: pin, now: "2026-11-17T02:10:00.000Z", exclusivePublisher: true }));
     expect(failed.ok).toBe(false); expect(failed.error).toContain("r2-list-failed:503");
     expect(lists).toBe(1); expect(fake.calls.slice(start).filter(c => c.method === "PUT")).toHaveLength(0);
+  });
+
+  it.each([0, 600, 1024])("completes standalone GC at the exact %i retained-manifest bound", async retainedCount => {
+    const fake = new FakeR2(); const current = assembly();
+    const set = (key: string, body: Uint8Array) => fake.objects.set(key, { body, headers: {} });
+    fake.seed(0);
+    set(manifestKey(pin), current.manifestBytes);
+    for (const shard of current.manifest.shards) set(shard.key, new Uint8Array(shard.gzipBytes));
+    const manifests: string[] = [];
+    for (let i = 0; i < retainedCount; i++) {
+      const at = new Date(Date.parse(current.manifest.publishedAt) + i * 1000).toISOString();
+      const bytes = enc.encode(JSON.stringify({ ...current.manifest, checkedAt: at, publishedAt: at }));
+      const key = retainedKey(pin, bytes); manifests.push(key); set(key, bytes);
+    }
+    set(retentionKey(pin), enc.encode(JSON.stringify({ v: 1, geometrySha256: pin, manifests })));
+    const orphan = `live/v1/${pin}/s00/${"f".repeat(64)}.json.gz`;
+    set(orphan, Uint8Array.of(1));
+    const pages = Math.ceil(fake.objects.size / 1000);
+    // Exhaust the total budget as well as Class B, including the final DELETE.
+    const maxOperations = retainedCount + 4 + pages + 1;
+    const adapter = client(fake); const reserve = vi.spyOn(adapter, "reserve");
+    await adapter.withExclusivePublisher(async () => {
+      const result = await collectGarbage({ store: adapter, geometrySha256: pin, now: "2026-11-20T02:00:00.000Z", exclusivePublisher: true,
+        dryRun: false, maxOperations, ...(retainedCount === 1024 ? {} : { maxRetainedManifests: retainedCount }) });
+      expect(result.ok, result.error).toBe(true);
+      expect(result.deleted).toEqual([orphan]);
+      expect(result.operations).toMatchObject({ gets: retainedCount + 4, lists: pages, deletes: 1, total: maxOperations });
+      expect(reserve).toHaveBeenCalledExactlyOnceWith({ classA: 64 + pages, classB: retainedCount + 5, total: maxOperations + pages + 1 });
+      // No spare GET or total operation may dispatch after the exact batch is consumed.
+      const count = fake.calls.length;
+      await expect(adapter.get(manifestKey(pin), { maxBytes: 250_000 })).rejects.toThrow("r2-reservation-short");
+      await expect(adapter.delete("unused/object")).rejects.toThrow("r2-reservation-short");
+      expect(fake.calls).toHaveLength(count);
+    });
+    expect(ledger(fake)).toMatchObject({ classA: 65 + pages, classB: retainedCount + 5 });
+    expect(fake.calls.filter(c => c.method === "GET" && keyOf(c.url) === ACCT)).toHaveLength(1);
+    const writesAndLists = fake.calls.filter(c => c.method === "PUT" || c.method === "DELETE" || new URL(c.url).searchParams.has("list-type"));
+    expect(writesAndLists.map(c => c.method === "GET" ? "LIST" : `${c.method}:${keyOf(c.url)}`)).toEqual([
+      ...Array(pages).fill("LIST"), `PUT:${ACCT}`, ...Array(pages).fill("LIST"), `DELETE:${orphan}`,
+    ]);
   });
 
   it("charges a preflight LIST once at the Class A monthly boundary", async () => {

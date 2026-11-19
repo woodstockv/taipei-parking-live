@@ -1,7 +1,7 @@
 {
   "sourceRepository": "https://github.com/woodstockv/taipei-parking-alert",
-  "sourceRef": "origin/cursor/live6a-r2-client",
-  "sourceCommit": "8302f9df9f4b8083cef3b42b7ab8d7ec26ad2516",
+  "sourceRef": "1465e28961aaa739820f3a7b2ee0e58336ebae4f",
+  "sourceCommit": "1465e28961aaa739820f3a7b2ee0e58336ebae4f",
   "files": {
     "shared/liveStatus.ts": "cc78c66d5e9968414283e13c859ab5a352fdd6604cf28887c487b6d868395790",
     "tools/live-status/assemble.ts": "fc66ae83b9c45ff270131541af8d54934b960d4760def93520a496e28a8d6c00",
@@ -10,12 +10,12 @@
     "tools/live-status/fetch.ts": "845e141e4e26ece2a5fdfcea11f0f57d230a69872b58718399dec8e29b12d03d",
     "tools/live-status/fixtures/README.md": "bcea2394e840bf698833d77ef5d38d9940d190b0daf719f381e4ad2e78dbe8e2",
     "tools/live-status/fixtures/taipei.xml": "3ae2c98efe981b80ae31f0e0f94c405838e32ba1d8ccff8096bda85609c2b5ee",
-    "tools/live-status/gc.ts": "572f2fb6a1cef739fc603b941b956b61a5e4200f396cc1691a6d56f26dda10dd",
+    "tools/live-status/gc.ts": "182ef3a1e842593c680385ac51e4556ba8fd9150e26a0b86432ff7f4f4431cb8",
     "tools/live-status/measure.ts": "d185568d15abfd01ffbeb78c486042c0118d4ae9a9064faed093834bbb214550",
     "tools/live-status/measurement.json": "6ef0670ff8aa01010064625926a9620300d254e25835e6c06230d4781416f462",
     "tools/live-status/node.d.ts": "c898030e5c1ae35e2190359a9aafa66d78a60a41bc3f0bc5e160d334b98d1010",
     "tools/live-status/publish.ts": "f8538b21370fdd311c8087cb05928fcc6cd70d807e2366eec8a8b5726b798d49",
-    "tools/live-status/r2-adapter.ts": "723f456c46e94dbab487459ecd933daa1ea674ed3bd5166a75600a5b5732e774",
+    "tools/live-status/r2-adapter.ts": "f81a791259bf3a3113532b9bf78d5b1dd6424e5ef748d7c89322e58680a6415c",
     "tools/live-status/runner-entrypoint.ts": "84a6702e6bd4f55a95475eb62048c298e3817e8e3dce33d1122d71990a96cd4a",
     "tools/live-status/sigv4.ts": "272fd0e323c6dee9b7e1a0509a4af2f0fe58b5d84c1167890fd8900fddca46ee",
     "web/public/live-geometry/e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608.json.gz": "9dfab33b1cf1f98f504d2accbfb43f1cc4185c18af214cb450fd548f7341b30b",
@@ -28,6 +28,6 @@
     "worker/test/live-status-gc.test.ts": "59bece721a0d095a4cd069e28fe20e0900bef5a0f8e15eaf936c1ba1a90a1920",
     "worker/test/live-status-publish-fixtures.ts": "03a0313493ab72790ec8df6d1dae91078ef55c9cdc793c2becdb7131a794daf9",
     "worker/test/live-status-publish.test.ts": "846d2af9b732ed91475c01ead4dedbbf19677931fedc8b8512513eedf399592a",
-    "worker/test/live-status-r2.test.ts": "42b19a28bf71857021da4ff975febf90c88b7393b08d9dbbc5c21d15b1ed4b77"
+    "worker/test/live-status-r2.test.ts": "93072fc25df3e3d508cde018e5ef461df794f9fa86f04da607e39c3ebc0a6135"
   }
 }

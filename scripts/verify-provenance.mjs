@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const p = JSON.parse(readFileSync(new URL('../PROVENANCE.json', import.meta.url)));
 const source = process.argv[2] || '/workspace/taipei-parking-alert';
-const expected = '8302f9df9f4b8083cef3b42b7ab8d7ec26ad2516';
+const expected = '1465e28961aaa739820f3a7b2ee0e58336ebae4f';
 if (p.sourceCommit !== expected || !Object.keys(p.files).length) throw Error('invalid-provenance');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 for (const [path, digest] of Object.entries(p.files)) {

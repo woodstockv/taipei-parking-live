@@ -203,6 +203,10 @@ class R2Client {
     await this.ensureLoaded();
     return add(budgetOf(this.persisted), this.owed);
   }
+  pendingUsage(): UsageBudget {
+    this.assertLock();
+    return { ...this.owed };
+  }
   /** Write-ahead one batch. Later matching attempts consume it and do not rewrite the ledger. */
   async reserve(delta: UsageBudget): Promise<void> {
     this.assertLock();

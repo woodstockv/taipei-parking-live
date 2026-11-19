@@ -48,7 +48,7 @@
     ]
   },
   "namespaceSha256": "e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608",
-  "manifestRecovery": "Rebuilt offline from hash-pinned local inputs using the recorded historical builder. Exact hash equals the LIVE-1 namespace recorded at 8302f9d docs/STATUS.md:1552-1553.",
+  "manifestRecovery": "Rebuilt offline from hash-pinned local inputs using the recorded historical builder. Exact hash equals the LIVE-1 namespace recorded at 1465e28 docs/STATUS.md:1552-1553.",
   "artifactPath": "web/public/live-geometry/e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608.json.gz",
   "artifactSourceCommit": "ed6627daf7c644b6c84fd41230f32a93e7d928c7",
   "artifactSha256": "9dfab33b1cf1f98f504d2accbfb43f1cc4185c18af214cb450fd548f7341b30b",
@@ -66,7 +66,7 @@
   },
   "evidenceOrigins": {
     "provenance/geometry/evidence/FORGE-023.md": {
-      "sourceCommit": "8302f9df9f4b8083cef3b42b7ab8d7ec26ad2516",
+      "sourceCommit": "1465e28961aaa739820f3a7b2ee0e58336ebae4f",
       "path": "docs/FORGE-023.md"
     },
     "provenance/geometry/evidence/FORGE-022-geometry-excerpt.md": {

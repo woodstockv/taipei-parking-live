@@ -7,6 +7,8 @@ import { manifestKey, type ObjectStore } from "./publish.ts";
 export const GRACE_MS = 48 * 60 * 60 * 1000;
 export interface ListedObject { key: string; bytes: number; uploadedAt: string }
 export interface GcStorage extends Pick<ObjectStore, "get" | "reserve" | "inventory"> {
+  /** Attempts already owed to the adapter's next reservation, including accounting reads. */
+  pendingUsage?(): UsageBudget;
   /** Complete, stable pagination under the same exclusive publisher lock.
    * No hidden retries. Each call is one Class A LIST. */
   list(options: { prefix: string; cursor: string | null; limit: number }): Promise<{ objects: ListedObject[]; cursor: string | null }>;
@@ -65,12 +67,14 @@ export async function collectGarbage(options: GcOptions): Promise<GcResult> {
       limit(maxObjects, 100_000) && maxObjects > 0 && limit(maxStorage, 2_000_000_000) && maxStorage > 0 &&
       limit(maxOps, 10_000) && maxOps > 0 && limit(maxRetained, 1024), "gc-policy");
     // Standalone GC writes an accounting ledger. Gate that PUT with the same
-    // whole-bucket inventory used by publication, then reserve both listings.
+    // whole-bucket inventory used by publication, then reserve both listings
+    // and any accounting reads already owed to the adapter.
     if (store.reserve) {
       need(store.inventory, "gc-inventory-required");
       const pages = await store.inventory([]);
       need(Number.isSafeInteger(pages) && pages > 0 && pages <= 10, "gc-inventory-pages");
-      await store.reserve({ classA: maxPages + pages, classB: maxRetained + 4, total: maxOps + pages });
+      const pending = store.pendingUsage?.() ?? { classA: pages, classB: 0, total: pages };
+      await store.reserve({ classA: maxPages + pending.classA, classB: maxRetained + 4 + pending.classB, total: maxOps + pending.total });
     }
     const currentKey = manifestKey(pin); const indexKey = retentionKey(pin);
     const prefix = currentKey.slice(0, -"manifest.json".length);
