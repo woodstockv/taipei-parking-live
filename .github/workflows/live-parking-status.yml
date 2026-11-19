@@ -1,0 +1,50 @@
+name: Live parking status
+on:
+  schedule:
+    - cron: '2-59/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Use local fixture; compute plan without R2 writes'
+        type: boolean
+        default: true
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: live-parking-status-publisher
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: >-
+      github.event.repository.private == false &&
+      vars.LIVE_STATUS_PUBLIC_REPOSITORY != '' &&
+      github.repository == vars.LIVE_STATUS_PUBLIC_REPOSITORY &&
+      github.repository != 'woodstockv/taipei-parking-alert' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch) &&
+      (github.event_name != 'schedule' || vars.LIVE_SCHEDULE_ENABLED == 'true')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        timeout-minutes: 1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        timeout-minutes: 1
+        with:
+          node-version: '24.22.1'
+      - name: Compute fixture dry-run plan
+        if: github.event_name == 'workflow_dispatch' && inputs.dry_run
+        timeout-minutes: 3
+        run: node --experimental-transform-types tools/public-runner.ts --dry-run
+      - name: Publish one cycle
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.dry_run)
+        timeout-minutes: 3
+        env:
+          LIVE_STATUS_PUBLIC_REPOSITORY: ${{ vars.LIVE_STATUS_PUBLIC_REPOSITORY }}
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: node --experimental-transform-types tools/public-runner.ts

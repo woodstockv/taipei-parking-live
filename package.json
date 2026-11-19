@@ -1,0 +1,16 @@
+{
+  "name": "taipei-parking-live",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.22.1"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs && cd worker && ../node_modules/.bin/vitest run test/live-status-*.test.ts",
+    "verify:provenance": "node scripts/verify-provenance.mjs",
+    "dry-run": "node --experimental-transform-types tools/public-runner.ts --dry-run"
+  },
+  "devDependencies": {
+    "vitest": "3.2.7"
+  }
+}

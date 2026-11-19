@@ -1,15 +1,7 @@
-# taipei-parking-live
+# Taipei parking live status — dormant bootstrap
 
-A small live-status extractor for Taipei on-street parking.
+This public repository contains a locally prepared, one-shot publisher for Taipei parking status. It is **not deployed**: no workflow has been pushed, no bucket or credentials configured, and the schedule must remain off until the release gates are met. It does not access D1, TDX, or the application database.
 
-It reads the Taipei City TCMSV road-parking status feed (public open data),
-joins each cell to a pinned, reviewed geometry release, and publishes compact
-per-cell status shards plus a manifest to a public Cloudflare R2 bucket. The
-taipei-parking-alert web app (https://taipei-parking-alert.pages.dev) reads only
-the shards that cover the visible map area.
+The runner derives geometry from the pinned committed reader artifact and joins a public Taipei status feed. See [geometry provenance](docs/GEOMETRY-PROVENANCE.md) for the unresolved source-input provenance, [dry-run plan](docs/DRY-RUN-PLAN.md), [reader budget](docs/READER-BUDGET.md), [Viv's steps](docs/VIV-STEPS.md), [handoff](STATUS.md), and [attribution](DATA-ATTRIBUTION.md). The upstream copied files and source commit are recorded in [PROVENANCE.json](PROVENANCE.json).
 
-Status: provisioning only. This repository does not contain app code, and no
-scheduled job is enabled yet.
-
-- Code license: MIT (see `LICENSE`).
-- Data source and license: see `DATA-ATTRIBUTION.md`.
+With Node 24.22.1, run `npm ci`, `npm test`, `npm run verify:provenance` (requires the private checkout at `/workspace/taipei-parking-alert`, or pass its path to the script), and `npm run dry-run`. Production requires no npm install. Fixture dry-run reads no network or secrets. The workflow schedule is guarded by `LIVE_SCHEDULE_ENABLED == 'true'`; keep that variable unset until separately authorized. Manual dispatch defaults to dry-run. A real run additionally requires the exact public-repository allowlist and the R2 names listed in the plan. The current wrapper has no GC; do not enable sustained publication without a reviewed GC solution.
