@@ -1,0 +1,232 @@
+<DATA>
+  <ROAD>
+    <roadSegID>200523B</roadSegID>
+    <roadSegName>忠孝東路五段236巷27弄</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>04</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 06:24:59</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>20260A0</roadSegID>
+    <roadSegName>伊通街A</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>17</psId>
+        <cellStatus>1</cellStatus>
+        <data_Dt>2026-11-17 07:49:54</data_Dt>
+      </cell>
+      <cell>
+        <psId>18</psId>
+        <cellStatus>1</cellStatus>
+        <data_Dt>2026-11-17 07:09:49</data_Dt>
+      </cell>
+      <cell>
+        <psId>21</psId>
+        <cellStatus>1</cellStatus>
+        <data_Dt>2026-11-17 07:26:54</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>20560AE</roadSegID>
+    <roadSegName>光復南路(東側)</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>02</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 00:32:53</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>2075389</roadSegID>
+    <roadSegName>撫遠街389巷</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>04A </psId>
+        <cellStatus>2</cellStatus>
+        <data_Dt>2026-11-17 07:58:56</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>2080774</roadSegID>
+    <roadSegName>東新街77巷4弄</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>24</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 08:12:17</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>2085000</roadSegID>
+    <roadSegName>南港路一段</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>77</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-16 23:38:53</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>2085277</roadSegID>
+    <roadSegName>南港路一段277巷</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>03</psId>
+        <cellStatus>4</cellStatus>
+        <data_Dt>2026-11-17 09:25:48</data_Dt>
+      </cell>
+      <cell>
+        <psId>04</psId>
+        <cellStatus>4</cellStatus>
+        <data_Dt>2026-11-17 09:28:06</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>2085287</roadSegID>
+    <roadSegName>南港路一段287巷2弄</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>01</psId>
+        <cellStatus>4</cellStatus>
+        <data_Dt>2026-11-17 09:50:06</data_Dt>
+      </cell>
+      <cell>
+        <psId>02</psId>
+        <cellStatus>4</cellStatus>
+        <data_Dt>2026-11-17 09:32:36</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>2111000</roadSegID>
+    <roadSegName>成功路1段</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>23</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 06:23:50</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>21660F0</roadSegID>
+    <roadSegName>長春路F</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>76</psId>
+        <cellStatus>1</cellStatus>
+        <data_Dt>2026-11-17 09:26:33</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>21910A0</roadSegID>
+    <roadSegName>一江街A</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>09</psId>
+        <cellStatus>1</cellStatus>
+        <data_Dt>2026-11-17 07:35:38</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>21910B0</roadSegID>
+    <roadSegName>一江街</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList />
+  </ROAD>
+  <ROAD>
+    <roadSegID>2207000</roadSegID>
+    <roadSegName>松河街</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>122</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 01:00:09</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>220700A</roadSegID>
+    <roadSegName>松河街A</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>60</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 00:01:03</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>3041391</roadSegID>
+    <roadSegName>和平東路三段391巷</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>05</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 02:29:52</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>3084197</roadSegID>
+    <roadSegName>3084197(10060) 莊敬路197巷</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>11</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-16 22:42:33</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>3084325</roadSegID>
+    <roadSegName>莊敬路325巷45弄</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>43</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 07:02:04</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+  <ROAD>
+    <roadSegID>3176308</roadSegID>
+    <roadSegName>松仁路308巷</roadSegName>
+    <roadSegUpdatetime>20261117T095513</roadSegUpdatetime>
+    <cellStatusList>
+      <cell>
+        <psId>28</psId>
+        <cellStatus>3</cellStatus>
+        <data_Dt>2026-11-17 06:01:31</data_Dt>
+      </cell>
+    </cellStatusList>
+  </ROAD>
+</DATA>

@@ -1,0 +1,505 @@
+{
+  "geometrySha256": "e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608",
+  "current": {
+    "source": {
+      "name": "tcmsv",
+      "sha256": "8a13c95ab4aa42146193de9a5c839129595d89a39700ab481d19d88943a9a309",
+      "bytes": 7481690,
+      "etag": "0x8DF444E2CF5C76E",
+      "lastModified": "2026-11-17T01:57:46.000Z",
+      "capturedAt": "2026-11-17T01:57:58.222Z",
+      "batchTimes": [
+        "20261117T095513"
+      ],
+      "batchOldestAt": "2026-11-17T01:55:13.000Z",
+      "batchNewestAt": "2026-11-17T01:55:13.000Z"
+    },
+    "roads": 2339,
+    "cells": {
+      "total": 25169,
+      "matched": 14443,
+      "unmatched": 10562,
+      "ambiguous": 164
+    },
+    "geometry": {
+      "total": 51536,
+      "matched": 14443,
+      "unmatched": 37051,
+      "ambiguous": 42
+    },
+    "geometryCoverage": "51536/51536",
+    "matchedGeometryPercent": 28.025069854082584,
+    "shards": 32,
+    "fits64": true,
+    "rawBytes": {
+      "min": 99828,
+      "median": 108130,
+      "max": 127257
+    },
+    "gzipBytes": {
+      "min": 6489,
+      "median": 9199.5,
+      "max": 10872
+    },
+    "rowCounts": {
+      "min": 1610,
+      "median": 1610.5,
+      "max": 1611
+    },
+    "manifestBytes": 14412,
+    "perShard": [
+      {
+        "id": "s00",
+        "rawBytes": 115757,
+        "gzipBytes": 8013,
+        "rows": 1610
+      },
+      {
+        "id": "s01",
+        "rawBytes": 100043,
+        "gzipBytes": 7983,
+        "rows": 1611
+      },
+      {
+        "id": "s02",
+        "rawBytes": 103683,
+        "gzipBytes": 8008,
+        "rows": 1610
+      },
+      {
+        "id": "s03",
+        "rawBytes": 106834,
+        "gzipBytes": 7280,
+        "rows": 1611
+      },
+      {
+        "id": "s04",
+        "rawBytes": 115316,
+        "gzipBytes": 8008,
+        "rows": 1610
+      },
+      {
+        "id": "s05",
+        "rawBytes": 107235,
+        "gzipBytes": 9307,
+        "rows": 1611
+      },
+      {
+        "id": "s06",
+        "rawBytes": 103122,
+        "gzipBytes": 6965,
+        "rows": 1610
+      },
+      {
+        "id": "s07",
+        "rawBytes": 107658,
+        "gzipBytes": 8806,
+        "rows": 1611
+      },
+      {
+        "id": "s08",
+        "rawBytes": 101342,
+        "gzipBytes": 7388,
+        "rows": 1610
+      },
+      {
+        "id": "s09",
+        "rawBytes": 99828,
+        "gzipBytes": 6489,
+        "rows": 1611
+      },
+      {
+        "id": "s10",
+        "rawBytes": 105351,
+        "gzipBytes": 8073,
+        "rows": 1610
+      },
+      {
+        "id": "s11",
+        "rawBytes": 104545,
+        "gzipBytes": 9004,
+        "rows": 1611
+      },
+      {
+        "id": "s12",
+        "rawBytes": 112953,
+        "gzipBytes": 10152,
+        "rows": 1610
+      },
+      {
+        "id": "s13",
+        "rawBytes": 113734,
+        "gzipBytes": 10872,
+        "rows": 1611
+      },
+      {
+        "id": "s14",
+        "rawBytes": 108337,
+        "gzipBytes": 10815,
+        "rows": 1610
+      },
+      {
+        "id": "s15",
+        "rawBytes": 109463,
+        "gzipBytes": 10341,
+        "rows": 1611
+      },
+      {
+        "id": "s16",
+        "rawBytes": 107744,
+        "gzipBytes": 9092,
+        "rows": 1610
+      },
+      {
+        "id": "s17",
+        "rawBytes": 113535,
+        "gzipBytes": 9830,
+        "rows": 1611
+      },
+      {
+        "id": "s18",
+        "rawBytes": 109729,
+        "gzipBytes": 7003,
+        "rows": 1610
+      },
+      {
+        "id": "s19",
+        "rawBytes": 108553,
+        "gzipBytes": 9843,
+        "rows": 1611
+      },
+      {
+        "id": "s20",
+        "rawBytes": 103061,
+        "gzipBytes": 7497,
+        "rows": 1610
+      },
+      {
+        "id": "s21",
+        "rawBytes": 101910,
+        "gzipBytes": 7645,
+        "rows": 1611
+      },
+      {
+        "id": "s22",
+        "rawBytes": 106490,
+        "gzipBytes": 9816,
+        "rows": 1610
+      },
+      {
+        "id": "s23",
+        "rawBytes": 107923,
+        "gzipBytes": 9906,
+        "rows": 1611
+      },
+      {
+        "id": "s24",
+        "rawBytes": 117140,
+        "gzipBytes": 10038,
+        "rows": 1610
+      },
+      {
+        "id": "s25",
+        "rawBytes": 111579,
+        "gzipBytes": 10044,
+        "rows": 1611
+      },
+      {
+        "id": "s26",
+        "rawBytes": 127257,
+        "gzipBytes": 8023,
+        "rows": 1610
+      },
+      {
+        "id": "s27",
+        "rawBytes": 106636,
+        "gzipBytes": 9510,
+        "rows": 1611
+      },
+      {
+        "id": "s28",
+        "rawBytes": 120531,
+        "gzipBytes": 10372,
+        "rows": 1610
+      },
+      {
+        "id": "s29",
+        "rawBytes": 114114,
+        "gzipBytes": 10234,
+        "rows": 1611
+      },
+      {
+        "id": "s30",
+        "rawBytes": 110716,
+        "gzipBytes": 10869,
+        "rows": 1610
+      },
+      {
+        "id": "s31",
+        "rawBytes": 111449,
+        "gzipBytes": 10106,
+        "rows": 1611
+      }
+    ]
+  },
+  "previous": {
+    "source": {
+      "name": "tcmsv",
+      "sha256": "7b1f2921fa94890318d252299df51f83bfd035f0b621cc90c1a2cf595f93ee76",
+      "bytes": 7464746,
+      "etag": "0x8DF444D8AB4C314",
+      "lastModified": "2026-11-17T01:53:14.000Z",
+      "capturedAt": "2026-11-17T01:56:11.355Z",
+      "batchTimes": [
+        "20261117T095014"
+      ],
+      "batchOldestAt": "2026-11-17T01:50:14.000Z",
+      "batchNewestAt": "2026-11-17T01:50:14.000Z"
+    },
+    "roads": 2339,
+    "cells": {
+      "total": 25099,
+      "matched": 14404,
+      "unmatched": 10533,
+      "ambiguous": 162
+    },
+    "geometry": {
+      "total": 51536,
+      "matched": 14404,
+      "unmatched": 37091,
+      "ambiguous": 41
+    },
+    "geometryCoverage": "51536/51536",
+    "matchedGeometryPercent": 27.949394597950945,
+    "shards": 32,
+    "fits64": true,
+    "rawBytes": {
+      "min": 99809,
+      "median": 108091.5,
+      "max": 127219
+    },
+    "gzipBytes": {
+      "min": 6472,
+      "median": 9187.5,
+      "max": 10881
+    },
+    "rowCounts": {
+      "min": 1610,
+      "median": 1610.5,
+      "max": 1611
+    },
+    "manifestBytes": 14412,
+    "perShard": [
+      {
+        "id": "s00",
+        "rawBytes": 115738,
+        "gzipBytes": 8008,
+        "rows": 1610
+      },
+      {
+        "id": "s01",
+        "rawBytes": 100043,
+        "gzipBytes": 7990,
+        "rows": 1611
+      },
+      {
+        "id": "s02",
+        "rawBytes": 103588,
+        "gzipBytes": 7956,
+        "rows": 1610
+      },
+      {
+        "id": "s03",
+        "rawBytes": 106758,
+        "gzipBytes": 7254,
+        "rows": 1611
+      },
+      {
+        "id": "s04",
+        "rawBytes": 115277,
+        "gzipBytes": 8006,
+        "rows": 1610
+      },
+      {
+        "id": "s05",
+        "rawBytes": 107234,
+        "gzipBytes": 9300,
+        "rows": 1611
+      },
+      {
+        "id": "s06",
+        "rawBytes": 103084,
+        "gzipBytes": 6941,
+        "rows": 1610
+      },
+      {
+        "id": "s07",
+        "rawBytes": 107658,
+        "gzipBytes": 8785,
+        "rows": 1611
+      },
+      {
+        "id": "s08",
+        "rawBytes": 101361,
+        "gzipBytes": 7398,
+        "rows": 1610
+      },
+      {
+        "id": "s09",
+        "rawBytes": 99809,
+        "gzipBytes": 6472,
+        "rows": 1611
+      },
+      {
+        "id": "s10",
+        "rawBytes": 105313,
+        "gzipBytes": 8050,
+        "rows": 1610
+      },
+      {
+        "id": "s11",
+        "rawBytes": 104507,
+        "gzipBytes": 9007,
+        "rows": 1611
+      },
+      {
+        "id": "s12",
+        "rawBytes": 112934,
+        "gzipBytes": 10165,
+        "rows": 1610
+      },
+      {
+        "id": "s13",
+        "rawBytes": 113755,
+        "gzipBytes": 10881,
+        "rows": 1611
+      },
+      {
+        "id": "s14",
+        "rawBytes": 108241,
+        "gzipBytes": 10784,
+        "rows": 1610
+      },
+      {
+        "id": "s15",
+        "rawBytes": 109465,
+        "gzipBytes": 10313,
+        "rows": 1611
+      },
+      {
+        "id": "s16",
+        "rawBytes": 107687,
+        "gzipBytes": 9075,
+        "rows": 1610
+      },
+      {
+        "id": "s17",
+        "rawBytes": 113554,
+        "gzipBytes": 9872,
+        "rows": 1611
+      },
+      {
+        "id": "s18",
+        "rawBytes": 109729,
+        "gzipBytes": 6989,
+        "rows": 1610
+      },
+      {
+        "id": "s19",
+        "rawBytes": 108477,
+        "gzipBytes": 9815,
+        "rows": 1611
+      },
+      {
+        "id": "s20",
+        "rawBytes": 103061,
+        "gzipBytes": 7491,
+        "rows": 1610
+      },
+      {
+        "id": "s21",
+        "rawBytes": 101891,
+        "gzipBytes": 7633,
+        "rows": 1611
+      },
+      {
+        "id": "s22",
+        "rawBytes": 106548,
+        "gzipBytes": 9851,
+        "rows": 1610
+      },
+      {
+        "id": "s23",
+        "rawBytes": 107942,
+        "gzipBytes": 9926,
+        "rows": 1611
+      },
+      {
+        "id": "s24",
+        "rawBytes": 117045,
+        "gzipBytes": 10017,
+        "rows": 1610
+      },
+      {
+        "id": "s25",
+        "rawBytes": 111540,
+        "gzipBytes": 10007,
+        "rows": 1611
+      },
+      {
+        "id": "s26",
+        "rawBytes": 127219,
+        "gzipBytes": 8005,
+        "rows": 1610
+      },
+      {
+        "id": "s27",
+        "rawBytes": 106597,
+        "gzipBytes": 9492,
+        "rows": 1611
+      },
+      {
+        "id": "s28",
+        "rawBytes": 120512,
+        "gzipBytes": 10358,
+        "rows": 1610
+      },
+      {
+        "id": "s29",
+        "rawBytes": 114114,
+        "gzipBytes": 10240,
+        "rows": 1611
+      },
+      {
+        "id": "s30",
+        "rawBytes": 110695,
+        "gzipBytes": 10866,
+        "rows": 1610
+      },
+      {
+        "id": "s31",
+        "rawBytes": 111448,
+        "gzipBytes": 10127,
+        "rows": 1611
+      }
+    ]
+  },
+  "changedShards": 32,
+  "monthly": [
+    {
+      "days": 30,
+      "runs": 8640,
+      "worstCase": 285120,
+      "diffOnlyEstimate": 285120,
+      "freeTier": 1000000
+    },
+    {
+      "days": 31,
+      "runs": 8928,
+      "worstCase": 294624,
+      "diffOnlyEstimate": 294624,
+      "freeTier": 1000000
+    }
+  ],
+  "assumptions": "One manifest PUT per successful five-minute check, 200 or 304; changed immutable shard PUTs. Diff extrapolates this single saved transition; excludes retries/GC/other account use."
+}

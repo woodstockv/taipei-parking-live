@@ -1,0 +1,78 @@
+{
+  "sourceRepository": "https://github.com/woodstockv/taipei-parking-alert",
+  "dataset": {
+    "id": "5a911ea5-1694-4301-808e-e1780d971611",
+    "url": "https://data.taipei/dataset/detail?id=5a911ea5-1694-4301-808e-e1780d971611",
+    "downloadUrl": "https://data.taipei/api/dataset/5a911ea5-1694-4301-808e-e1780d971611/resource/7e2f32a0-9201-4666-a0ed-11034e6c2b66/download",
+    "provider": "臺北市停車管理工程處",
+    "license": "OGDL-Taiwan-1.0",
+    "recordedFetchDate": "2026-11-06",
+    "fetchDateEvidence": "FORGE-022 dated source report + FORGE-023 download/hash record; exact HTTP fetch time/headers not retained"
+  },
+  "inputs": {
+    "archive": {
+      "relativePath": "taipei-parking-shp.zip",
+      "bytes": 56300005,
+      "sha256": "a0c239d03f8a080747fb7ff23fafaec0d21566994306ebbbc5d8843e7efef3e5"
+    },
+    "shp": {
+      "relativePath": "shp/park01_202610021742.shp",
+      "canonicalPath": "/workspace/forge-022/shp/park01_202610021742.shp",
+      "bytes": 45514168,
+      "sha256": "8a5b5047afde29dd1bb829c38d739a2d41a8c60ca52123e2baaaafd9be3c382c",
+      "archiveMember": "park01_202610021742.shp"
+    },
+    "dbf": {
+      "relativePath": "shp/park01_202610021742.dbf",
+      "canonicalPath": "/workspace/forge-022/shp/park01_202610021742.dbf",
+      "bytes": 490060576,
+      "sha256": "89959e2cc58e72b53407b7abc427036e8a91ba176fc11565e8fe9445478b062c",
+      "archiveMember": "park01_202610021742.dbf"
+    },
+    "statusXml": {
+      "relativePath": "TCMSV_roadquery.xml",
+      "canonicalPath": "/workspace/forge-022/TCMSV_roadquery.xml",
+      "bytes": 8635288,
+      "sha256": "126583745bcc353794d4f9a22ca2e25ce562c59b28581f593d1609b8fb7af812"
+    }
+  },
+  "builder": {
+    "sourceCommit": "64646b0f55fd134939d8791aa06b8a79eec65f15",
+    "entrypoint": "provenance/geometry/builder/tools/build-taipei-space-tiles.ts",
+    "sourcePaths": [
+      "tools/build-taipei-space-tiles.ts",
+      "worker/src/shp.ts",
+      "worker/src/spaceTiles.ts",
+      "worker/src/tcmsvJoin.ts",
+      "worker/src/tcmsvXml.ts"
+    ]
+  },
+  "namespaceSha256": "e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608",
+  "manifestRecovery": "Rebuilt offline from hash-pinned local inputs using the recorded historical builder. Exact hash equals the LIVE-1 namespace recorded at 1465e28 docs/STATUS.md:1552-1553.",
+  "artifactPath": "web/public/live-geometry/e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608.json.gz",
+  "artifactSourceCommit": "ed6627daf7c644b6c84fd41230f32a93e7d928c7",
+  "artifactSha256": "9dfab33b1cf1f98f504d2accbfb43f1cc4185c18af214cb450fd548f7341b30b",
+  "decodedArtifactSha256": "55c9fc8d4487d8b0cf67a244d59ccf0b4d4520ec9038d71eb446af77fa0987d1",
+  "reproductionRuntime": "Node 24.22.1, Linux (gzip level 9, default OS=3 and mtime=0)",
+  "evidenceFiles": {
+    "provenance/geometry/builder/tools/build-taipei-space-tiles.ts": "dc4326719b4df678fc9e32a9c43c011cbea08a0bac4b93b70919a0a5d0cd0329",
+    "provenance/geometry/builder/worker/src/shp.ts": "8847d3b5c7a0e72760473a64ab1bd6ed1325a1d2cea227ac8df5f30d700f0ca7",
+    "provenance/geometry/builder/worker/src/spaceTiles.ts": "24fd1b10bf304238c3677bdf7019317cb45b336fa2b589792b0b0913cce75177",
+    "provenance/geometry/builder/worker/src/tcmsvJoin.ts": "169012ffaa4403d04d7f68db92ffdaa1c18ba707c902f1eb3c58b05bdb9c777d",
+    "provenance/geometry/builder/worker/src/tcmsvXml.ts": "a1efffda9cb402ca13c66a23acc755f6ab83a499ee619ba5d1df979370c1570a",
+    "provenance/geometry/evidence/FORGE-022-geometry-excerpt.md": "d9f659bb55b061ed516fb21c55aed4e2490bb95e3c4dbee96571e68a669f0eed",
+    "provenance/geometry/evidence/FORGE-023.md": "39df3e1357c0fb71446b404d8c01871b2e70f9812e16464b7f4d1eef3fba02e3",
+    "provenance/geometry/tile-provenance.json": "e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608"
+  },
+  "evidenceOrigins": {
+    "provenance/geometry/evidence/FORGE-023.md": {
+      "sourceCommit": "1465e28961aaa739820f3a7b2ee0e58336ebae4f",
+      "path": "docs/FORGE-023.md"
+    },
+    "provenance/geometry/evidence/FORGE-022-geometry-excerpt.md": {
+      "localPath": "/workspace/forge-022/DATA-SOURCES.md",
+      "wholeSourceSha256": "49a0a68ce9e7f60d126a342205438b65a09512da87a338d087bab9e547d255b7",
+      "selection": "dated preamble + section 1 only; excluded unrelated source research"
+    }
+  }
+}
