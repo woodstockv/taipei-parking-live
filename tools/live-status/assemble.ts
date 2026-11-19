@@ -120,7 +120,7 @@ function bounds(spots: readonly { lng: number; lat: number }[]): Bbox {
   return b;
 }
 function count(total: number, matched: number, ambiguous: number): JoinCounts { return { total, matched, unmatched: total - matched - ambiguous, ambiguous }; }
-function cellKey(c: TcmsvCell): string { const r = roadParts(c.roadName); return JSON.stringify([r.family, r.letter, canonicalSpaceId(c.psId)]); }
+function cellKey(c: TcmsvCell): string { const r = roadParts(c.roadName, c.roadSegId); return JSON.stringify([r.family, r.letter, canonicalSpaceId(c.psId)]); }
 export interface AssemblyInput {
   xml: Uint8Array; geometry: Geometry; capturedAt: string; checkedAt: string; publishedAt: string;
   etag: string | null; lastModified: string | null;

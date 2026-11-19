@@ -4,13 +4,39 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { analyzeCoverage, classifyCoverage, parseCsv } from "../../tools/live-status/coverage.ts";
 import { assemble, type Geometry, type GeometrySpot } from "../../tools/live-status/assemble.ts";
-import type { TcmsvCell } from "../src/tcmsvJoin.ts";
+import { joinSpaces, type TcmsvCell } from "../src/tcmsvJoin.ts";
 
 const pin = "a".repeat(64);
 const spot = (road: string, pkid: string): GeometrySpot => ({ road, pkid, id: `tpe:${road}:${pkid}`, lat: 25.05, lng: 121.53 });
 const g: Geometry = { sha256: pin, spots: [spot("測試路A", "1"), spot("測試路A", "01"), spot("測試路A", "2")] };
 const cell = (roadName: string, psId: string, roadSegId = "100"): TcmsvCell => ({ roadName, psId, roadSegId, cellStatus: "2", collectedAt: "2026-11-17 09:00:00" });
 describe("LIVE-3 reproducible coverage", () => {
+  it.each(['geometry key', 'source key', 'provider alias'])('agrees with the shared join on %s collisions', kind => {
+    const geometry = { sha256: pin, spots: [spot('測試路1段A', '1'), spot(kind === 'provider alias' ? '另一條路B' : '測試路一段A', '1')] };
+    const cells = [cell('測試路一段A', '1', '100')];
+    if (kind !== 'geometry key') cells.push(cell(geometry.spots[1].road, '1', kind === 'provider alias' ? '100' : '200'));
+    const expected = kind === 'geometry key' ? 'ambiguous-geometry-key' : kind === 'source key' ? 'ambiguous-source-key' : 'ambiguous-source-alias';
+    expect(classifyCoverage(geometry, cells).map(c => c.reason)).toEqual(cells.map(() => expected));
+    expect(joinSpaces(geometry.spots, cells)).toMatchObject({ matched: 0, unmatched: 0, ambiguous: 2 });
+  });
+
+  it("uses the same validated road aliases for keys and family/letter diagnostics, retaining raw labels", () => {
+    const geometry = { sha256: pin, spots: [spot("環河南路2段A", "136"), spot("環河南路2段A", "136A"), spot("中山北路一段", "1")] };
+    const cells = [cell("4092534(12150) 環河南路二段A", "136", "4092534"),
+      cell("環河南路二段A", "136A", "200"), cell("中山北路1段", "01", "300"),
+      cell("環河南路二段B", "136", "400"), cell("環河南路二段A", "136B", "500"),
+      cell("4092535(12150) 環河南路二段A", "136", "600")];
+    const classified = classifyCoverage(geometry, cells);
+    expect(classified.map(c => c.reason)).toEqual(["matched", "matched", "matched", "no-road-letter", "no-local-id", "no-road-family"]);
+    expect(classified.map(c => c.cell)).toEqual(cells);
+    expect(classified[0].cell.roadName).toBe("4092534(12150) 環河南路二段A");
+  });
+  it("keeps normalized source and geometry collisions ambiguous", () => {
+    const geometry = { sha256: pin, spots: [spot("信義路5段150巷", "03"), spot("內湖路2段", "21"), spot("內湖路二段", "21")] };
+    const classified = classifyCoverage(geometry, [cell("信義路五段150巷", "03", "302600A"),
+      cell("3026150(12345) 信義路5段150巷", "3", "3026150"), cell("內湖路二段", "21", "2108000")]);
+    expect(classified.map(c => c.reason)).toEqual(["ambiguous-source-key", "ambiguous-source-key", "ambiguous-geometry-key"]);
+  });
   it("separates family, exact road letter, and local ID misses", () => {
     const reasons = classifyCoverage(g, [cell("未知路A", "1", "100"), cell("測試路B", "2", "200"), cell("測試路A", "3", "300"), cell("測試路A", "2", "400")]).map(c => c.reason);
     expect(reasons).toEqual(["no-road-family", "no-road-letter", "no-local-id", "matched"]);
