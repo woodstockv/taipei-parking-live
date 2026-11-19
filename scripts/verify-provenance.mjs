@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const p = JSON.parse(readFileSync(new URL('../PROVENANCE.json', import.meta.url)));
 const source = process.argv[2] || '/workspace/taipei-parking-alert';
-const expected = '1465e28961aaa739820f3a7b2ee0e58336ebae4f';
+const expected = '0e2f3f7a90532f2cf1bdb2c7caaea683c07b140c';
 if (p.sourceCommit !== expected || !Object.keys(p.files).length) throw Error('invalid-provenance');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 for (const [path, digest] of Object.entries(p.files)) {
@@ -15,7 +15,7 @@ for (const [path, digest] of Object.entries(p.files)) {
 }
 console.log(`Verified ${Object.keys(p.files).length} files against ${expected}`);
 // The separate historical geometry builder is also copied verbatim. It is not
-// part of the 26-file publisher closure above.
+// part of the publisher and replay closure above.
 const geometryRecord = JSON.parse(readFileSync(new URL('../provenance/geometry/source.json', import.meta.url)));
 for (const path of geometryRecord.builder.sourcePaths) {
   const destination = `provenance/geometry/builder/${path}`;

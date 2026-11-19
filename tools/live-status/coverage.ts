@@ -6,9 +6,10 @@ import { fileURLToPath } from "node:url";
 import { parseCapture, readGeometry, sha256, type Geometry } from "./assemble.ts";
 import { canonicalSpaceId, roadParts, type TcmsvCell } from "../../worker/src/tcmsvJoin.ts";
 
-const key = (road: string, id: string): string => {
-  const p = roadParts(road); return JSON.stringify([p.family, p.letter, canonicalSpaceId(id)]);
+const key = (road: string, id: string, roadSegId?: string): string => {
+  const p = roadParts(road, roadSegId); return JSON.stringify([p.family, p.letter, canonicalSpaceId(id)]);
 };
+const cellKey = (c: TcmsvCell): string => key(c.roadName, c.psId, c.roadSegId);
 const alias = (c: TcmsvCell): string => JSON.stringify([c.roadSegId, c.psId]);
 function counts(values: string[]): Map<string, number> {
   const out = new Map<string, number>();
@@ -20,10 +21,10 @@ export function classifyCoverage(geometry: Geometry, cells: TcmsvCell[]) {
   const families = new Set(geometry.spots.map(s => roadParts(s.road).family));
   const roads = new Set(geometry.spots.map(s => { const p = roadParts(s.road); return JSON.stringify([p.family, p.letter]); }));
   const geometryKeys = counts(geometry.spots.map(s => key(s.road, s.pkid)));
-  const sourceKeys = counts(cells.map(c => key(c.roadName, c.psId)));
+  const sourceKeys = counts(cells.map(cellKey));
   const aliases = counts(cells.map(alias));
   return cells.map(cell => {
-    const k = key(cell.roadName, cell.psId); const p = roadParts(cell.roadName);
+    const k = cellKey(cell); const p = roadParts(cell.roadName, cell.roadSegId);
     let reason: CoverageReason;
     // Same ambiguity precedence and raw provider-alias rules as LIVE-1.
     if (sourceKeys.get(k)! > 1) reason = "ambiguous-source-key";
@@ -106,7 +107,7 @@ export function analyzeCoverage(geometry: Geometry, xml: Uint8Array, ntpc: Recor
   const geometryKeys = new Set(geometry.spots.map(s => key(s.road, s.pkid)));
   const geometryFamilyIds = new Set(geometry.spots.map(s => JSON.stringify([roadParts(s.road).family, canonicalSpaceId(s.pkid)])));
   const ambiguous = classified.filter(c => c.reason.startsWith("ambiguous"));
-  const sourceKeyCounts = counts(capture.cells.map(c => key(c.roadName, c.psId)));
+  const sourceKeyCounts = counts(capture.cells.map(cellKey));
   const byRoad = new Map<string, { roadSegId: string; road: string; unmatched: number; ambiguous: number }>();
   const byRoadName = new Map<string, { road: string; unmatched: number; ambiguous: number }>();
   const byType = new Map<string, { carType: string; usage: string; matched: number; unmatched: number; ambiguous: number }>();
@@ -125,8 +126,8 @@ export function analyzeCoverage(geometry: Geometry, xml: Uint8Array, ntpc: Recor
     carGroup[state]++; byCarType.set(type.carType, carGroup);
   }
   const sourceRoads = new Set(capture.cells.map(c => c.roadName));
-  const sourceKeys = new Set(capture.cells.map(c => key(c.roadName, c.psId)));
-  const unmatchedKeys = new Set(classified.filter(c => c.reason.startsWith("no-")).map(c => key(c.cell.roadName, c.cell.psId)));
+  const sourceKeys = new Set(capture.cells.map(cellKey));
+  const unmatchedKeys = new Set(classified.filter(c => c.reason.startsWith("no-")).map(c => cellKey(c.cell)));
   const ntpcKeys = new Set(ntpc.map(r => key(r.roadname, r.cellid)));
   const ntpcRoads = new Set(ntpc.map(r => r.roadname));
   const taipeiCountyRows = ntpc.filter(r => r.countycode === "63000");
@@ -139,10 +140,10 @@ export function analyzeCoverage(geometry: Geometry, xml: Uint8Array, ntpc: Recor
     reasons, unmatched: classified.filter(c => c.reason.startsWith("no-")).length,
     ambiguous: ambiguous.length,
     ambiguityDetails: { duplicateSourceKeys: [...sourceKeyCounts.values()].filter(n => n > 1).length,
-      cellsWithExactGeometryKey: ambiguous.filter(c => geometryKeys.has(key(c.cell.roadName, c.cell.psId))).length,
-      cellsWithoutExactGeometryKey: ambiguous.filter(c => !geometryKeys.has(key(c.cell.roadName, c.cell.psId))).length },
+      cellsWithExactGeometryKey: ambiguous.filter(c => geometryKeys.has(cellKey(c.cell))).length,
+      cellsWithoutExactGeometryKey: ambiguous.filter(c => !geometryKeys.has(cellKey(c.cell))).length },
     crossLetterCandidatesAmongUnmatched: classified.filter(c => c.reason.startsWith("no-") &&
-      geometryFamilyIds.has(JSON.stringify([roadParts(c.cell.roadName).family, canonicalSpaceId(c.cell.psId)]))).length,
+      geometryFamilyIds.has(JSON.stringify([roadParts(c.cell.roadName, c.cell.roadSegId).family, canonicalSpaceId(c.cell.psId)]))).length,
     byRoad: [...byRoad.values()].filter(r => r.unmatched || r.ambiguous).sort((a, b) => b.unmatched - a.unmatched || a.roadSegId.localeCompare(b.roadSegId)),
     ambiguousByRoadName: [...byRoadName.values()].filter(r => r.ambiguous).sort((a, b) => b.ambiguous - a.ambiguous || a.road.localeCompare(b.road)),
     byRawCarType: [...byCarType.values()].sort((a, b) => a.carType.localeCompare(b.carType)),
@@ -153,7 +154,7 @@ export function analyzeCoverage(geometry: Geometry, xml: Uint8Array, ntpc: Recor
       rowsWithTaipeiCountyCode: taipeiCountyRows.length, distinctRoadIds: new Set(ntpc.map(r => r.roadid)).size,
       distinctRoads: ntpcRoads.size, exactRoadNamesInTaipei: [...ntpcRoads].filter(r => sourceRoads.has(r)).sort(),
       distinctLocalKeys: ntpcKeys.size, keysAlsoInTaipei: [...ntpcKeys].filter(k => sourceKeys.has(k)).length,
-      unmatchedTaipeiCellsWithSameLocalKey: classified.filter(c => unmatchedKeys.has(key(c.cell.roadName, c.cell.psId)) && ntpcKeys.has(key(c.cell.roadName, c.cell.psId))).length,
+      unmatchedTaipeiCellsWithSameLocalKey: classified.filter(c => unmatchedKeys.has(cellKey(c.cell)) && ntpcKeys.has(cellKey(c.cell))).length,
       rawProviderAliasCollisions: ntpc.filter(r => providerAliases.has(JSON.stringify([r.roadid, r.cellid]))).length,
       coordinatesExactlyEqualToPinnedGeometry: ntpc.filter(r => geometryCoordinates.has(JSON.stringify([Number(r.latitude), Number(r.longitude)]))).length,
       validCrossCityIdentityMatches: taipeiCountyRows.filter(r => sourceKeys.has(key(r.roadname, r.cellid))).length,

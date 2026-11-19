@@ -28,9 +28,45 @@ function geometryRelease(spots = [spot("測試路A", "1")]) {
   return { bytes, pin: sha256(bytes), files: new Map([[m.files[0].file, page], [m.indexes[0].file, index]]), m };
 }
 describe("LIVE-1 strict joins and preserved source evidence", () => {
+  it("normalizes matching keys without rewriting geometry, road letters or original provider IDs", () => {
+    const cells = '<cell><psId>136</psId><cellStatus>1</cellStatus></cell><cell><psId>136A </psId><cellStatus>2</cellStatus></cell>';
+    const geometry = { sha256: pin, spots: [spot("環河南路2段A", "136"), spot("環河南路2段A", "136A"), spot("環河南路2段B", "136")] };
+    const a = assemble(input({ xml: Buffer.from(xml(cells, "4092534(12150) 環河南路二段A", "4092534")), geometry }));
+    expect(a.manifest.geometrySha256).toBe(pin);
+    expect(a.manifest.geometry).toEqual({ total: 3, matched: 2, unmatched: 1, ambiguous: 0 });
+    expect(a.manifest.cells).toEqual({ total: 2, matched: 2, unmatched: 0, ambiguous: 0 });
+    expect(a.shards.flatMap(s => s.payload.rows)).toEqual([
+      ["tpe:環河南路2段A:136", "matched", "4092534", "136", "1", ""],
+      ["tpe:環河南路2段A:136A", "matched", "4092534", "136A ", "2", ""],
+      ["tpe:環河南路2段B:136", "unmatched", null, null, null, null],
+    ]);
+    const wrongPrefix = assemble(input({ xml: Buffer.from(xml(cells, "4092535(12150) 環河南路二段A", "4092534")), geometry }));
+    expect(wrongPrefix.manifest.geometry).toEqual({ total: 3, matched: 0, unmatched: 3, ambiguous: 0 });
+    expect(wrongPrefix.manifest.cells).toEqual({ total: 2, matched: 0, unmatched: 2, ambiguous: 0 });
+  });
+  it("excludes newly normalized source collisions and counts both candidates as ambiguous", () => {
+    const body = (road: string, seg: string) => xml(undefined, road, seg).replace(/^<DATA>|<\/DATA>$/g, "");
+    const capture = `<DATA>${body("信義路五段150巷", "302600A")}${body("3026150(12345) 信義路5段150巷", "3026150")}</DATA>`;
+    const a = assemble(input({ xml: Buffer.from(capture), geometry: { sha256: pin, spots: [spot("信義路5段150巷", "1")] } }));
+    expect(a.manifest.geometry).toEqual({ total: 1, matched: 0, unmatched: 0, ambiguous: 1 });
+    expect(a.manifest.cells).toEqual({ total: 2, matched: 0, unmatched: 0, ambiguous: 2 });
+    expect(a.shards[0].payload.rows).toEqual([["tpe:信義路5段150巷:1", "ambiguous", null, null, null, null]]);
+  });
+  it("rejects two geometry road spellings mapping to one source cell", () => {
+    const a = assemble(input({ xml: Buffer.from(xml(undefined, "測試路一段A")),
+      geometry: { sha256: pin, spots: [spot("測試路1段A", "1"), spot("測試路一段A", "1")] }, partitionRows: 1 }));
+    expect(a.manifest.geometry).toEqual({ total: 2, matched: 0, unmatched: 0, ambiguous: 2 });
+    expect(a.manifest.cells).toEqual({ total: 1, matched: 0, unmatched: 0, ambiguous: 1 });
+    expect(a.shards).toHaveLength(2);
+    expect(a.shards.flatMap(s => s.payload.rows)).toEqual([
+      ["tpe:測試路1段A:1", "ambiguous", null, null, null, null],
+      ["tpe:測試路一段A:1", "ambiguous", null, null, null, null],
+    ]);
+  });
   it("uses saved cells with exact road letters and original psId, including whitespace", () => {
     const capture = parseCapture(fixture);
-    const spaces = capture.cells.map((c, i) => spot(c.roadName, c.psId.trim(), i));
+    // The saved source's metadata prefix is not part of the geometry road label.
+    const spaces = capture.cells.map((c, i) => spot(c.roadName.replace(/^3084197\(10060\) /, ""), c.psId.trim(), i));
     spaces.push(spot("伊通街A", "19"), spot("伊通街B", "17"), spot("一江街", "9"));
     const a = assemble(input({ xml: fixture, geometry: { sha256: pin, spots: spaces } }));
     const rows = a.shards.flatMap(s => s.payload.rows);
@@ -78,7 +114,7 @@ describe("LIVE-1 strict joins and preserved source evidence", () => {
 });
 describe("LIVE-1 deterministic spatial packing", () => {
   it("is byte-identical with reversed geometry/source order, and deterministic gzip", () => {
-    const cap = parseCapture(fixture); const spots = cap.cells.map((c, i) => spot(c.roadName, c.psId.trim(), i));
+    const cap = parseCapture(fixture); const spots = cap.cells.map((c, i) => spot(c.roadName.replace(/^3084197\(10060\) /, ""), c.psId.trim(), i));
     const opts = input({ xml: fixture, geometry: { sha256: pin, spots }, partitionRows: 4 });
     const a = assemble(opts);
     const b = assemble({ ...opts, geometry: { sha256: pin, spots: [...spots].reverse() } });

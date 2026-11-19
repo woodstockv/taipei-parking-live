@@ -6,10 +6,11 @@
     "node": ">=24.22.1"
   },
   "scripts": {
-    "test": "node --experimental-transform-types --test test/*.test.mjs && cd worker && ../node_modules/.bin/vitest run test/live-status-*.test.ts",
+    "test": "node --experimental-transform-types --test test/*.test.mjs && cd worker && ../node_modules/.bin/vitest run test/live-status-*.test.ts test/tcmsvJoin.test.ts",
     "verify:provenance": "node scripts/verify-provenance.mjs",
     "dry-run": "node --experimental-transform-types tools/public-runner.ts --dry-run",
-    "verify:geometry": "node --experimental-transform-types scripts/verify-geometry.mjs"
+    "verify:geometry": "node --experimental-transform-types scripts/verify-geometry.mjs",
+    "replay:dry-run": "cd worker && ../node_modules/.bin/vitest run test/live-status-normalization-replay.test.ts"
   },
   "devDependencies": {
     "vitest": "3.2.7"

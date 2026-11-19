@@ -62,8 +62,23 @@ export function mapCellStatus(raw: string | null | undefined): CellStatus {
   }
 }
 
-export function roadParts(name: string): { family: string; letter: string } {
-  const trimmed = name.trim();
+const SECTION_NUMERALS: Readonly<Record<string, string>> = {
+  一: "1", 二: "2", 三: "3", 四: "4", 五: "5", 六: "6", 七: "7", 八: "8", 九: "9", 十: "10",
+};
+
+/** Matching only: never use the result as a road label, geometry ID or provider alias. */
+export function normalizeRoadName(name: string, roadSegId?: string): string {
+  let road = name.trim();
+  // Only source records can validate this metadata. Geometry has no roadSegID.
+  const prefix = /^([A-Za-z0-9]+)\([0-9]+\)\s+/.exec(road);
+  if (prefix && prefix[1] === roadSegId) road = road.slice(prefix[0].length);
+  // The observed section spellings are 一–十. Match the whole numeral run so
+  // unsupported compound numerals cannot be partially rewritten (十一 -> 十1).
+  return road.replace(/[〇零一二三四五六七八九十百千萬]+(?=段)/g, n => SECTION_NUMERALS[n] ?? n);
+}
+
+export function roadParts(name: string, roadSegId?: string): { family: string; letter: string } {
+  const trimmed = normalizeRoadName(name, roadSegId);
   const match = trimmed.match(/^(.*?)([A-Z])$/);
   if (!match || !match[1]) return { family: trimmed, letter: "" };
   return { family: match[1], letter: match[2] };
@@ -101,13 +116,31 @@ interface IndexedCell {
   ambiguous: boolean;
 }
 
+function joinKey(parts: ReturnType<typeof roadParts>, id: string): string {
+  return `${parts.family}\u0000${parts.letter}\u0000${id}`;
+}
+
+function providerAlias(cell: TcmsvCell): string {
+  return JSON.stringify([cell.roadSegId, cell.psId]);
+}
+
 export function joinSpaces(spaces: readonly ShpSpaceRef[], cells: readonly TcmsvCell[]): JoinSummary {
+  // Count the complete inputs before assigning any row: neither input order nor
+  // page boundaries may select a winner when several geometries share a key.
+  const geometryKeys = new Map<string, number>();
+  for (const space of spaces) {
+    const key = joinKey(roadParts(space.road), canonicalSpaceId(space.pkid));
+    geometryKeys.set(key, (geometryKeys.get(key) ?? 0) + 1);
+  }
   const byKey = new Map<string, IndexedCell>();
   const byFamilyId = new Map<string, Set<string>>();
+  const aliases = new Map<string, number>();
   for (const cell of cells) {
-    const parts = roadParts(cell.roadName);
+    const parts = roadParts(cell.roadName, cell.roadSegId);
     const id = canonicalSpaceId(cell.psId);
-    const key = `${parts.family}\u0000${parts.letter}\u0000${id}`;
+    const key = joinKey(parts, id);
+    const alias = providerAlias(cell);
+    aliases.set(alias, (aliases.get(alias) ?? 0) + 1);
     const familyKey = `${parts.family}\u0000${id}`;
     const letters = byFamilyId.get(familyKey) ?? new Set<string>();
     letters.add(parts.letter);
@@ -124,14 +157,17 @@ export function joinSpaces(spaces: readonly ShpSpaceRef[], cells: readonly Tcmsv
   for (const space of spaces) {
     const parts = roadParts(space.road);
     const id = canonicalSpaceId(space.pkid);
-    const key = `${parts.family}\u0000${parts.letter}\u0000${id}`;
+    const key = joinKey(parts, id);
     const indexed = byKey.get(key);
     const letters = byFamilyId.get(`${parts.family}\u0000${id}`);
     const cross = !!letters && [...letters].some((letter) => letter !== parts.letter);
     let join: CellJoin = "unmatched";
     let cell: TcmsvCell | null = null;
-    if (indexed?.ambiguous) join = "ambiguous";
-    else if (indexed) {
+    // A match requires one geometry, one source key and one raw provider alias.
+    // Repeated aliases can occur under different source road labels/keys too.
+    if (indexed && (indexed.ambiguous || geometryKeys.get(key)! > 1 || aliases.get(providerAlias(indexed.cell))! > 1)) {
+      join = "ambiguous";
+    } else if (indexed) {
       join = "matched";
       cell = indexed.cell;
     }
