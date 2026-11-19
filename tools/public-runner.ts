@@ -3,6 +3,11 @@ import { gunzipSync } from 'node:zlib';
 import { sha256, assemble, type Geometry } from './live-status/assemble.ts';
 import { createR2Adapter } from './live-status/r2-adapter.ts';
 import { runEntrypoint } from './live-status/runner-entrypoint.ts';
+import { validateRunnerConfig } from './public-runner-config.ts';
+
+const dryRun = process.argv.includes('--dry-run');
+// Fail before geometry loading, adapter creation, or source/R2 network calls.
+validateRunnerConfig({ dryRun, env: process.env });
 
 const pin = 'e7a882774f11a7d78c0ff1606290a76fd1dea45403c8949f2c593373f1cc0608';
 const artifactHash = '9dfab33b1cf1f98f504d2accbfb43f1cc4185c18af214cb450fd548f7341b30b';
@@ -31,7 +36,7 @@ for (const [i, shard] of trial.shards.entries()) {
   const expected = raw.shards[i].points.map((point: [string, number, number]) => point[0]).sort();
   if (JSON.stringify(actual) !== JSON.stringify(expected)) throw Error('geometry-partition-mismatch');
 }
-if (process.argv.includes('--dry-run')) {
+if (dryRun) {
   console.log(JSON.stringify({ mode: 'fixture-dry-run', geometryPin: pin, geometryArtifactSha256: artifactHash, geometryRows: spots.length,
     computedManifests: 1, computedShards: trial.shards.length, wouldPutShards: trial.shards.length, wouldPutManifest: 1,
     estimatedBootstrapClassA: 36, estimatedBootstrapClassB: 4, actualClassA: 0, actualClassB: 0, actualPut: 0, actualDelete: 0,
